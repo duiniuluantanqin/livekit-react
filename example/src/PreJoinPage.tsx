@@ -9,12 +9,16 @@ import { useNavigate } from 'react-router-dom';
 export const PreJoinPage = () => {
   // initial state from query parameters
   const searchParams = new URLSearchParams(window.location.search);
-  const storedUrl = searchParams.get('url') ?? 'ws://localhost:7880';
-  const storedToken = searchParams.get('token') ?? '';
+  const storedUrl = searchParams.get('url') ?? 'wss://rtc.educlouds.cn:5551';
+  var token = searchParams.get('token') ?? '';
+  const storedRoomName = searchParams.get('roomName') ?? 'my-test-room-name';
+  const storedUserName = searchParams.get('userName') ?? 'user1';
 
   // state to pass onto room
   const [url, setUrl] = useState(storedUrl);
-  const [token, setToken] = useState<string>(storedToken);
+  //const [token, setToken] = useState<string>(storedToken);
+  const [roomName, setRoomName] = useState(storedRoomName);
+  const [userName, setUserName] = useState(storedUserName);
   const [simulcast, setSimulcast] = useState(true);
   const [dynacast, setDynacast] = useState(true);
   const [adaptiveStream, setAdaptiveStream] = useState(true);
@@ -28,12 +32,12 @@ export const PreJoinPage = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (token && url) {
+    if (userName && roomName && url) {
       setConnectDisabled(false);
     } else {
       setConnectDisabled(true);
     }
-  }, [token, url]);
+  }, [userName, roomName, url]);
 
   const toggleVideo = async () => {
     if (videoTrack) {
@@ -78,20 +82,30 @@ export const PreJoinPage = () => {
     }
   };
 
-  const connectToRoom = async () => {
-    if (videoTrack) {
-      videoTrack.stop();
-    }
+ const connectToRoomWithToken = async () => {
+    let getTokenUrl = "/getToken?userName=" + userName + "&roomName=" + roomName;
+    fetch(getTokenUrl, {
+      method: 'GET',
+      headers: {
+        'Content-type': 'application/json; charset=UTF-8',
+        
+      },
+    })
+      .then((response) => response.text())
+      .then((data) => {
+        token = data;
+        navigateToRoom();
+      })
+      .catch((err) => {
+        console.log(err.message);
+      });
+  };
 
-    if (
-      window.location.protocol === 'https:' &&
-      url.startsWith('ws://') &&
-      !url.startsWith('ws://localhost')
-    ) {
-      alert('Unable to connect to insecure websocket from https');
+  const navigateToRoom = async () => {
+    if (!token) {
+      alert("token is empty.");
       return;
     }
-
     const params: { [key: string]: string } = {
       url,
       token,
@@ -117,6 +131,24 @@ export const PreJoinPage = () => {
       pathname: '/room',
       search: '?' + new URLSearchParams(params).toString(),
     });
+  }
+
+  const connectToRoom = async () =>  {
+    if (videoTrack) {
+      videoTrack.stop();
+    }
+
+    if (
+      window.location.protocol === 'https:' &&
+      url.startsWith('ws://') &&
+      !url.startsWith('ws://localhost')
+    ) {
+      alert('Unable to connect to insecure websocket from https');
+      return;
+    }
+
+    // get token first
+    connectToRoomWithToken();
   };
 
   let videoElement: ReactElement;
@@ -132,22 +164,22 @@ export const PreJoinPage = () => {
         <h2>LiveKit Video</h2>
         <hr />
         <div className="entrySection">
-          <div>
+          <div hidden>
             <div className="label">LiveKit URL</div>
             <div>
-              <input type="text" name="url" value={url} onChange={(e) => setUrl(e.target.value)} />
+              <input type="text" disabled  name="url" value={url} onChange={(e) => setUrl(e.target.value)} />
             </div>
           </div>
           <div>
-            <div className="label">Token</div>
+            <div className="label">Room</div>
             <div>
-              <input
-                type="text"
-                name="token"
-                value={token}
-                onChange={(e) => setToken(e.target.value)}
-                autoFocus={true}
-              />
+              <input type="text" name="roomName" value={roomName} onChange={(e) => setRoomName(e.target.value)} />
+            </div>
+          </div>
+          <div>
+            <div className="label">User</div>
+            <div>
+              <input type="text" name="userName" value={userName} autoFocus={true} onChange={(e) => setUserName(e.target.value)} />
             </div>
           </div>
           <div className="options">
@@ -213,11 +245,9 @@ export const PreJoinPage = () => {
       </main>
       <footer>
         This page is built with <a href="https://github.com/livekit/livekit-react">LiveKit React</a>
-        &nbsp; (
-        <a href="https://github.com/livekit/livekit-react/blob/master/example/src/PreJoinPage.tsx">
-          source
-        </a>
-        )
+        ,&nbsp;
+        modified by Chenhaibo
+
       </footer>
     </div>
   );
