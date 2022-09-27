@@ -101,6 +101,7 @@ export const RoomPage = () => {
             dynacast: isSet(query, 'dynacast'),
             publishDefaults: {
               simulcast: isSet(query, 'simulcast'),
+              videoCodec: 'h264',
             },
             videoCaptureDefaults: {
               resolution: VideoPresets.h720.resolution,
