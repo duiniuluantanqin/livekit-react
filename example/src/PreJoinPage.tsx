@@ -12,7 +12,7 @@ export const PreJoinPage = () => {
   const storedUrl = searchParams.get('url') ?? 'wss://rtc.educlouds.cn:5551';
   var token = searchParams.get('token') ?? '';
   const storedRoomName = searchParams.get('roomName') ?? 'my-test-room-name';
-  const storedUserName = searchParams.get('userName') ?? 'user1';
+  const storedUserName = searchParams.get('userName') ?? '乐智用户';
 
   // state to pass onto room
   const [url, setUrl] = useState(storedUrl);
@@ -32,12 +32,12 @@ export const PreJoinPage = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (userName && roomName && url) {
+    if (roomName && url) {
       setConnectDisabled(false);
     } else {
       setConnectDisabled(true);
     }
-  }, [userName, roomName, url]);
+  }, [roomName, url]);
 
   const toggleVideo = async () => {
     if (videoTrack) {
@@ -82,13 +82,25 @@ export const PreJoinPage = () => {
     }
   };
 
+  function getRandomString(length: any) {
+    var str = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    var result = '';
+    for (var i = length; i > 0; --i) 
+        result += str[Math.floor(Math.random() * str.length)];
+    return result;
+}
+
+
  const connectToRoomWithToken = async () => {
-    let getTokenUrl = "/getToken?userName=" + userName + "&roomName=" + roomName;
+    const identity = getRandomString(11);
+    let getTokenUrl = "https://rtc.educlouds.cn:8999/getToken?roomName=" + roomName + "&identity=" + identity;
+    if (userName) {
+      getTokenUrl += "&userName=" + userName;
+    }
     fetch(getTokenUrl, {
       method: 'GET',
       headers: {
         'Content-type': 'application/json; charset=UTF-8',
-        
       },
     })
       .then((response) => response.text())
@@ -189,6 +201,7 @@ export const PreJoinPage = () => {
                 type="checkbox"
                 name="simulcast"
                 checked={simulcast}
+                disabled
                 onChange={(e) => setSimulcast(e.target.checked)}
               />
               <label htmlFor="simulcast-option">Simulcast</label>
@@ -199,6 +212,7 @@ export const PreJoinPage = () => {
                 type="checkbox"
                 name="dynacast"
                 checked={dynacast}
+                disabled
                 onChange={(e) => setDynacast(e.target.checked)}
               />
               <label htmlFor="dynacast-option">Dynacast</label>
@@ -209,6 +223,7 @@ export const PreJoinPage = () => {
                 type="checkbox"
                 name="adaptiveStream"
                 checked={adaptiveStream}
+                disabled
                 onChange={(e) => setAdaptiveStream(e.target.checked)}
               />
               <label htmlFor="adaptivestream-option">Adaptive Stream</label>
@@ -244,10 +259,7 @@ export const PreJoinPage = () => {
         </div>
       </main>
       <footer>
-        This page is built with <a href="https://github.com/livekit/livekit-react">LiveKit React</a>
-        ,&nbsp;
-        modified by Chenhaibo
-
+        Powered by Chenhaibo
       </footer>
     </div>
   );
