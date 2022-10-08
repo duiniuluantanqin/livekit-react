@@ -26,6 +26,16 @@
   overflow-y: scroll;
 }
 
+.chatBar {
+  grid-column: 12 / 13;
+  display: grid;
+}
+
+.participantListBar {
+  grid-column: 13 / 14;
+  display: grid;
+}
+
 .controlsArea {
   height: 100px;
   display: grid;

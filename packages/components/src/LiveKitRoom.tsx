@@ -5,6 +5,8 @@ import { ParticipantProps } from './components/ParticipantView';
 import { StageProps } from './components/StageProps';
 import { StageView } from './components/StageView';
 import { useRoom } from '@livekit/react-core';
+import { ChatProps } from './components/ChatView';
+import { ParticipantListProps } from './components/ParticipantListView';
 
 export interface RoomProps {
   url: string;
@@ -15,7 +17,9 @@ export interface RoomProps {
   onConnected?: (room: Room) => void;
   // when user leaves the room
   onLeave?: (room: Room) => void;
+  participantListRenderer?: (props: ParticipantListProps) => React.ReactElement | null;
   stageRenderer?: (props: StageProps) => React.ReactElement | null;
+  chatRenderer?: (props: ChatProps) => React.ReactElement | null;
   participantRenderer?: (props: ParticipantProps) => React.ReactElement | null;
   controlRenderer?: (props: ControlsProps) => React.ReactElement | null;
 }
@@ -26,6 +30,8 @@ export const LiveKitRoom = ({
   roomOptions,
   connectOptions,
   stageRenderer,
+  chatRenderer,
+  participantListRenderer,
   participantRenderer,
   controlRenderer,
   onConnected,
@@ -56,6 +62,8 @@ export const LiveKitRoom = ({
     roomState,
     participantRenderer,
     controlRenderer,
+    chatRenderer,
+    participantListRenderer,
     onLeave,
   });
 };

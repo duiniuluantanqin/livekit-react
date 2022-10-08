@@ -1,5 +1,5 @@
-import { faDesktop, faStop } from '@fortawesome/free-solid-svg-icons';
-import { Room } from 'livekit-client';
+import { faDesktop, faMessage, faPeopleGroup, faStop } from '@fortawesome/free-solid-svg-icons';
+import { DataPacket_Kind, Room } from 'livekit-client';
 import React, { ReactElement } from 'react';
 import { useParticipant } from '@livekit/react-core';
 import { AudioSelectButton } from './AudioSelectButton';
@@ -9,6 +9,8 @@ import { VideoSelectButton } from './VideoSelectButton';
 
 export interface ControlsProps {
   room: Room;
+  enableChat?: boolean;
+  enableParticipantList?: boolean;
   enableScreenShare?: boolean;
   enableAudio?: boolean;
   enableVideo?: boolean;
@@ -104,11 +106,39 @@ export const ControlsView = ({
     );
   }
 
+  let chatButton: ReactElement | undefined;
+  if (true) {
+    chatButton = (
+      <ControlButton
+        label="聊天"
+        icon={faMessage}
+        onClick={() => {
+          let encoder = new TextEncoder();
+          const msg = encoder.encode("chatMsg");
+          room.localParticipant.publishData(msg, DataPacket_Kind.RELIABLE);
+        }}
+      />
+    );
+  }
+
+  let participantButton: ReactElement | undefined;
+  participantButton = (
+    <ControlButton
+      label="成员"
+      icon={faPeopleGroup}
+      onClick={() => {
+        alert("成员列表");
+      }}
+    />
+  );
+
   return (
     <div className={styles.controlsWrapper}>
       {muteButton}
       {videoButton}
       {screenButton}
+      {participantButton}
+      {chatButton}
       {onLeave && (
         <ControlButton
           label="End"

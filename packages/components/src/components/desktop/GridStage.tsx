@@ -1,6 +1,8 @@
 import { Participant } from 'livekit-client';
 import React, { useEffect, useState } from 'react';
+import { ChatView } from '../ChatView';
 import { ControlsView } from '../ControlsView';
+import { ParticipantListView } from '../ParticipantListView';
 import { ParticipantView } from '../ParticipantView';
 import { StageProps } from '../StageProps';
 import styles from './styles.module.css';
@@ -9,6 +11,8 @@ export const GridStage = ({
   roomState,
   participantRenderer,
   controlRenderer,
+  chatRenderer,
+  participantListRenderer,
   onLeave,
 }: StageProps) => {
   const { isConnecting, error, participants, room } = roomState;
@@ -98,6 +102,8 @@ export const GridStage = ({
 
   const ParticipantRenderer = participantRenderer ?? ParticipantView;
   const ControlRenderer = controlRenderer ?? ControlsView;
+  const ChatRenderer = chatRenderer ?? ChatView;
+  const ParticipantListRenderer = participantListRenderer ?? ParticipantListView;
 
   return (
     // global container
@@ -118,6 +124,12 @@ export const GridStage = ({
             />
           );
         })}
+      </div>
+      <div className={styles.chatBar}>
+        <ChatRenderer room={room} />
+      </div>
+      <div className={styles.participantListBar}>
+        <ParticipantListRenderer participants={participants} room={room} />
       </div>
       <div className={styles.controlsArea}>
         <ControlRenderer room={room} onLeave={onLeave} />

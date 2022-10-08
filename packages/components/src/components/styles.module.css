@@ -71,6 +71,45 @@ video.video {
 .controlsWrapper {
 }
 
+.participantListWrapper {
+  display: grid;
+  gap: 18px;
+  grid-auto-rows: 100%;
+}
+
+.participantListWrapper li {
+  list-style: none;
+  text-align: left;
+  font-size: 16px;
+}
+
+.participantListWrapper li:hover {
+  background: #63635d;
+}
+
+.chatWrapper {
+  display: grid;
+  gap: 18px;
+  grid-template-rows: 70% 15% 8%;
+  font-size: 14px;
+  justify-items: end;
+}
+
+.chatWrapper textarea {
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+  font-size: 16px;
+  background-color: transparent;
+  color: white;
+  padding: 8px;
+}
+
+.textareaRecvMsg {
+  height: 100%;
+  overflow: auto; 
+  resize: none;
+}
+
 .buttonWrapper {
   display: inline-block;
   margin: 4px;
@@ -114,6 +153,14 @@ button.dangerButton {
 
 button.dangerButton:hover {
   background: #b81212;
+}
+
+button.chatButton {
+  background: #0884be;
+}
+
+button.chatButton:hover {
+  background: #07a4ed;
 }
 
 button.dropdown {
