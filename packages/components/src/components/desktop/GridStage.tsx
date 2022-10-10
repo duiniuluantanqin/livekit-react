@@ -1,9 +1,10 @@
-import { Participant } from 'livekit-client';
+import { Participant, Room } from 'livekit-client';
 import React, { useEffect, useState } from 'react';
 import { ChatView } from '../ChatView';
 import { ControlsView } from '../ControlsView';
 import { ParticipantListView } from '../ParticipantListView';
 import { ParticipantView } from '../ParticipantView';
+import { SidebarTabs } from '../SidebarTabs';
 import { StageProps } from '../StageProps';
 import styles from './styles.module.css';
 
@@ -11,14 +12,35 @@ export const GridStage = ({
   roomState,
   participantRenderer,
   controlRenderer,
-  chatRenderer,
-  participantListRenderer,
+
   onLeave,
 }: StageProps) => {
-  const { isConnecting, error, participants, room } = roomState;
+
+  const { isConnecting, error, participants, room } = roomState;  
   const [visibleParticipants, setVisibleParticipants] = useState<Participant[]>([]);
   const [showOverlay, setShowOverlay] = useState(false);
   const [gridClass, setGridClass] = React.useState(styles.grid1x1);
+
+  type TabsType = {
+    label: string;
+    index: number;
+    Component: React.FC<{ room: Room, participants: Participant[], index: number }>;
+  }[];
+  
+  // Tabs Array
+  const tabs: TabsType = [
+    {
+      label: "聊天",
+      index: 1,
+      Component: ChatView
+    },
+    {
+      label: "成员管理",
+      index: 2,
+      Component: ParticipantListView
+    }
+  ];
+  const [selectedTab, setSelectedTab] = useState<number>(tabs[0].index);
 
   // compute visible participants and sort.
   useEffect(() => {
@@ -102,8 +124,7 @@ export const GridStage = ({
 
   const ParticipantRenderer = participantRenderer ?? ParticipantView;
   const ControlRenderer = controlRenderer ?? ControlsView;
-  const ChatRenderer = chatRenderer ?? ChatView;
-  const ParticipantListRenderer = participantListRenderer ?? ParticipantListView;
+
 
   return (
     // global container
@@ -125,15 +146,13 @@ export const GridStage = ({
           );
         })}
       </div>
-      <div className={styles.chatBar}>
-        <ChatRenderer room={room} />
-      </div>
-      <div className={styles.participantListBar}>
-        <ParticipantListRenderer participants={participants} room={room} />
+      <div className={styles.sideBarTab}>
+        <SidebarTabs selectedTab={selectedTab} onClick={setSelectedTab} tabs={tabs} participants={participants} room={room}/>
       </div>
       <div className={styles.controlsArea}>
         <ControlRenderer room={room} onLeave={onLeave} />
       </div>
+
     </div>
   );
 };

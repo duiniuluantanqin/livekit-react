@@ -1,16 +1,18 @@
-import { DataPacket_Kind, Room, RoomEvent } from 'livekit-client';
-import React, { ReactElement, useEffect, useState } from 'react';
+import { DataPacket_Kind, Participant, Room, RoomEvent } from 'livekit-client';
+import React, { FC, Fragment, ReactElement, useEffect, useState } from 'react';
 import { useParticipant } from '@livekit/react-core';
 import styles from './styles.module.css';
 import { ControlButton } from './ControlButton';
 
 export interface ChatProps {
   room: Room;
+  participants: Participant[]
   enableChat?: boolean;
 }
 
-export const ChatView = ({
+export const ChatView: FC<ChatProps> = ({
   room,
+  participants,
   enableChat,
 }: ChatProps) => {
   const { } = useParticipant(
@@ -40,16 +42,17 @@ export const ChatView = ({
     const strData = decoder.decode(payload);
     let from = 'server';
     if (participant) {
-      from = participant.identity;
+      from = participant.name || participant.identity;
     }
     setRecvMsg(recvMsg + "\n" + from + ": " + strData);
   })
 
   function onSendMsg() {
+    console.log(participants);
     let encoder = new TextEncoder();
     const msg = encoder.encode(sendMsg);
     room.localParticipant.publishData(msg, DataPacket_Kind.RELIABLE);
-    setRecvMsg(recvMsg + "\n" + room.localParticipant.identity + "(me): " + sendMsg);
+    setRecvMsg(recvMsg + "\n" + (room.localParticipant.name || room.localParticipant.identity) + "(me): " + sendMsg);
     setSendMsg("");
   }
 
@@ -72,23 +75,22 @@ export const ChatView = ({
   }
 
   return (
-    <div className={styles.chatWrapper}>
-      <div>
+    <Fragment>
+      <div className={styles.chatWrapper}>
         <textarea className={styles.textareaRecvMsg} readOnly value={recvMsg} />
-      </div>
-      <div>
         <textarea 
-        className={styles.textareaRecvMsg} 
-        value={sendMsg}  
-        placeholder="Type your message here" 
-        onChange={(e) => setSendMsg(e.target.value)} 
-        onKeyDown={onTextareaKeyDown}
+          className={styles.textareaRecvMsg} 
+          value={sendMsg}  
+          placeholder="Type your message here" 
+          onChange={(e) => setSendMsg(e.target.value)} 
+          onKeyDown={onTextareaKeyDown}
         />
-      </div>
-      <div className="right">
-        {chatButton}
-      </div>
+        <div className="right">
+          {chatButton}
+        </div>
     </div>
+    </Fragment>
+    
   );
 };
 

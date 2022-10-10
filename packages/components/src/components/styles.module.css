@@ -77,6 +77,11 @@ video.video {
   grid-auto-rows: 100%;
 }
 
+.participantListWrapper ul {
+  margin: 3px;
+  padding: 5px;
+}
+
 .participantListWrapper li {
   list-style: none;
   text-align: left;
@@ -84,15 +89,19 @@ video.video {
 }
 
 .participantListWrapper li:hover {
-  background: #63635d;
+  background: rgba(45, 44, 44, 0.8);
 }
 
 .chatWrapper {
   display: grid;
   gap: 18px;
-  grid-template-rows: 70% 15% 8%;
+  grid-template-rows: 65% 20% 15%;
   font-size: 14px;
   justify-items: end;
+}
+
+.chatWrapper .right {
+  grid-column: 3 / 4;
 }
 
 .chatWrapper textarea {
@@ -156,6 +165,7 @@ button.dangerButton:hover {
 }
 
 button.chatButton {
+  border-radius: 20px;
   background: #0884be;
 }
 
@@ -257,3 +267,47 @@ ul.list li:first-child {
   display: inline-block;
   margin-right: 12px;
 }
+
+.tabsComponent [role="tablist"] {
+  display: flex;
+  flex-wrap: wrap;
+  border-bottom: 1px solid #26282a;
+  position: relative;
+}
+
+.tabsComponent [role="tablist"] button {
+  border-width: 1px;
+  border-style: solid;
+  border-color: #333333;
+  border-top-left-radius: 0.25rem;
+  border-top-right-radius: 0.25rem;
+  display: block;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  margin: 0 1px;
+  outline: none;
+  color: white;
+  background: black;
+  transition: border 0.2s ease-in-out 0s;
+}
+
+.tabsComponent [role="tablist"] button.active,
+.tabsComponent [role="tablist"] button:focus,
+.tabsComponent [role="tablist"] button:hover {
+  border-width: 1px;
+  border-color: white;
+}
+
+.tabsComponent [role="tabpanel"] {
+  text-align: left;
+  box-shadow: 1px 1px 2px rgba(15, 14, 14, 0.75);
+  overflow-y: auto;
+  min-height: 50vh;
+  max-height: 80vh;
+}
+
+.tabsComponent [role="tablist"] button {
+  margin: 0;
+}
+
+

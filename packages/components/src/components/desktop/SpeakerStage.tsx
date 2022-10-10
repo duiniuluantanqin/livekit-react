@@ -1,8 +1,11 @@
-import { Participant, Track, VideoTrack } from 'livekit-client';
+import { Participant, Room, Track, VideoTrack } from 'livekit-client';
 import React, { ReactElement, useEffect, useState } from 'react';
+import { ChatView } from '../ChatView';
 import { ControlsView } from '../ControlsView';
+import { ParticipantListView } from '../ParticipantListView';
 import { ParticipantView } from '../ParticipantView';
 import { ScreenShareView } from '../ScreenShareView';
+import { SidebarTabs } from '../SidebarTabs';
 import { StageProps } from '../StageProps';
 import { defaultSortParticipants } from '../StageUtils';
 import styles from './styles.module.css';
@@ -18,6 +21,27 @@ export const SpeakerStage = ({
   const [showOverlay, setShowOverlay] = useState(false);
   const sortFn = sortParticipants ?? defaultSortParticipants;
   const [sortedParticipants, setSortedParticipants] = useState(sortFn(participants));
+
+  type TabsType = {
+    label: string;
+    index: number;
+    Component: React.FC<{ room: Room, participants: Participant[], index: number }>;
+  }[];
+  
+  // Tabs Array
+  const tabs: TabsType = [
+    {
+      label: "聊天",
+      index: 1,
+      Component: ChatView
+    },
+    {
+      label: "成员管理",
+      index: 2,
+      Component: ParticipantListView
+    }
+  ];
+  const [selectedTab, setSelectedTab] = useState<number>(tabs[0].index);
 
   useEffect(() => {
     setSortedParticipants(sortFn(participants));
@@ -96,6 +120,9 @@ export const SpeakerStage = ({
             );
           })}
         </div>
+      </div>
+      <div className={styles.sideBarTab}>
+        <SidebarTabs selectedTab={selectedTab} onClick={setSelectedTab} tabs={tabs} participants={participants} room={room}/>
       </div>
       <div className={styles.controlsArea}>
         <ControlRenderer room={room} onLeave={onLeave} />

@@ -1,4 +1,4 @@
-import { faDesktop, faMessage, faPeopleGroup, faStop } from '@fortawesome/free-solid-svg-icons';
+import { faDesktop, faMessage, faPeopleGroup, faPowerOff, faStop } from '@fortawesome/free-solid-svg-icons';
 import { DataPacket_Kind, Room } from 'livekit-client';
 import React, { ReactElement } from 'react';
 import { useParticipant } from '@livekit/react-core';
@@ -93,7 +93,7 @@ export const ControlsView = ({
     const enabled = room.localParticipant.isScreenShareEnabled;
     screenButton = (
       <ControlButton
-        label={enabled ? 'Stop sharing' : 'Share screen'}
+        label={enabled ? '停止共享' : '共享'}
         icon={enabled ? faStop : faDesktop}
         disabled={screenButtonDisabled}
         onClick={() => {
@@ -141,7 +141,8 @@ export const ControlsView = ({
       {chatButton}
       {onLeave && (
         <ControlButton
-          label="End"
+          label="退出"
+          icon={faPowerOff}
           className={styles.dangerButton}
           onClick={() => {
             room.disconnect();
