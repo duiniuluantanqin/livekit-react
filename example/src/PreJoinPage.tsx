@@ -93,8 +93,7 @@ export const PreJoinPage = () => {
 
  const connectToRoomWithToken = async () => {
     const identity = getRandomString(11);
-    // let getTokenUrl = "https://rtc.educlouds.cn:8999/getToken?roomName=" + roomName + "&identity=" + identity;
-    let getTokenUrl = "http://localhost:8000/getToken?roomName=" + roomName + "&identity=" + identity;
+    let getTokenUrl = "/getToken?roomName=" + roomName + "&identity=" + identity;
     if (userName) {
       getTokenUrl += "&userName=" + userName;
     }

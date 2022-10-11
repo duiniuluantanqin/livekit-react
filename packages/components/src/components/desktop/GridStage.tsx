@@ -12,7 +12,6 @@ export const GridStage = ({
   roomState,
   participantRenderer,
   controlRenderer,
-
   onLeave,
 }: StageProps) => {
 
@@ -41,6 +40,14 @@ export const GridStage = ({
     }
   ];
   const [selectedTab, setSelectedTab] = useState<number>(tabs[0].index);
+
+  function showParticipantListTab() {
+    alert("123");
+  }
+
+  function showChatTab() {
+    alert("123");
+  }
 
   // compute visible participants and sort.
   useEffect(() => {
@@ -125,7 +132,6 @@ export const GridStage = ({
   const ParticipantRenderer = participantRenderer ?? ParticipantView;
   const ControlRenderer = controlRenderer ?? ControlsView;
 
-
   return (
     // global container
     <div className={styles.container}>
@@ -146,11 +152,23 @@ export const GridStage = ({
           );
         })}
       </div>
-      <div className={styles.sideBarTab}>
-        <SidebarTabs selectedTab={selectedTab} onClick={setSelectedTab} tabs={tabs} participants={participants} room={room}/>
-      </div>
+      {(1) && (
+        <div className={styles.sideBarTab}>
+          <SidebarTabs 
+            selectedTab={selectedTab} 
+            onClick={setSelectedTab} 
+            tabs={tabs} 
+            participants={participants} 
+            room={room}
+          />
+        </div>
+      )}
       <div className={styles.controlsArea}>
-        <ControlRenderer room={room} onLeave={onLeave} />
+        <ControlRenderer 
+          room={room} 
+          onLeave={onLeave} 
+          showChatTab={showChatTab}
+          showParticipantListTab={showParticipantListTab}/>
       </div>
 
     </div>

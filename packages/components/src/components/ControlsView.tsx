@@ -1,5 +1,5 @@
 import { faDesktop, faMessage, faPeopleGroup, faPowerOff, faStop } from '@fortawesome/free-solid-svg-icons';
-import { DataPacket_Kind, Room } from 'livekit-client';
+import { Room } from 'livekit-client';
 import React, { ReactElement } from 'react';
 import { useParticipant } from '@livekit/react-core';
 import { AudioSelectButton } from './AudioSelectButton';
@@ -9,12 +9,12 @@ import { VideoSelectButton } from './VideoSelectButton';
 
 export interface ControlsProps {
   room: Room;
-  enableChat?: boolean;
-  enableParticipantList?: boolean;
   enableScreenShare?: boolean;
   enableAudio?: boolean;
   enableVideo?: boolean;
   onLeave?: (room: Room) => void;
+  showChatTab?: (visible: boolean) => void;
+  showParticipantListTab?: (visible: boolean) => void;
 }
 
 export const ControlsView = ({
@@ -23,6 +23,8 @@ export const ControlsView = ({
   enableAudio,
   enableVideo,
   onLeave,
+  showChatTab,
+  showParticipantListTab,
 }: ControlsProps) => {
   const { cameraPublication: camPub, microphonePublication: micPub } = useParticipant(
     room.localParticipant,
@@ -107,28 +109,20 @@ export const ControlsView = ({
   }
 
   let chatButton: ReactElement | undefined;
-  if (true) {
-    chatButton = (
-      <ControlButton
-        label="聊天"
-        icon={faMessage}
-        onClick={() => {
-          let encoder = new TextEncoder();
-          const msg = encoder.encode("chatMsg");
-          room.localParticipant.publishData(msg, DataPacket_Kind.RELIABLE);
-        }}
-      />
-    );
-  }
-
-  let participantButton: ReactElement | undefined;
-  participantButton = (
+  chatButton = (
+    <ControlButton
+      label="聊天"
+      icon={faMessage}
+      onClick={() => {showChatTab && showChatTab(true)}}
+    />
+  );
+  
+  let participantListButton: ReactElement | undefined;
+  participantListButton = (
     <ControlButton
       label="成员"
       icon={faPeopleGroup}
-      onClick={() => {
-        alert("成员列表");
-      }}
+      onClick={() => {showParticipantListTab && showParticipantListTab(true)}}
     />
   );
 
@@ -137,7 +131,7 @@ export const ControlsView = ({
       {muteButton}
       {videoButton}
       {screenButton}
-      {participantButton}
+      {participantListButton}
       {chatButton}
       {onLeave && (
         <ControlButton
