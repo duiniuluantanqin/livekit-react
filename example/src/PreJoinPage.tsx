@@ -12,7 +12,7 @@ export const PreJoinPage = () => {
   const storedUrl = searchParams.get('url') ?? 'wss://rtc.educlouds.cn:5551';
   var token = searchParams.get('token') ?? '';
   const storedRoomName = searchParams.get('roomName') ?? 'my-test-room-name';
-  const storedUserName = searchParams.get('userName') ?? '乐智用户';
+  const storedUserName = searchParams.get('userName') ?? '未命名用户';
 
   // state to pass onto room
   const [url, setUrl] = useState(storedUrl);
@@ -93,6 +93,7 @@ export const PreJoinPage = () => {
 
  const connectToRoomWithToken = async () => {
     const identity = getRandomString(11);
+    //let getTokenUrl = "http://localhost:8000/getToken?roomName=" + roomName + "&identity=" + identity;
     let getTokenUrl = "/getToken?roomName=" + roomName + "&identity=" + identity;
     if (userName) {
       getTokenUrl += "&userName=" + userName;
@@ -173,8 +174,6 @@ export const PreJoinPage = () => {
   return (
     <div className="prejoin">
       <main>
-        <h2>LiveKit Video</h2>
-        <hr />
         <div className="entrySection">
           <div hidden>
             <div className="label">LiveKit URL</div>
@@ -201,7 +200,6 @@ export const PreJoinPage = () => {
                 type="checkbox"
                 name="simulcast"
                 checked={simulcast}
-                disabled
                 onChange={(e) => setSimulcast(e.target.checked)}
               />
               <label htmlFor="simulcast-option">Simulcast</label>
@@ -212,7 +210,6 @@ export const PreJoinPage = () => {
                 type="checkbox"
                 name="dynacast"
                 checked={dynacast}
-                disabled
                 onChange={(e) => setDynacast(e.target.checked)}
               />
               <label htmlFor="dynacast-option">Dynacast</label>
@@ -223,7 +220,6 @@ export const PreJoinPage = () => {
                 type="checkbox"
                 name="adaptiveStream"
                 checked={adaptiveStream}
-                disabled
                 onChange={(e) => setAdaptiveStream(e.target.checked)}
               />
               <label htmlFor="adaptivestream-option">Adaptive Stream</label>
@@ -250,6 +246,7 @@ export const PreJoinPage = () => {
           </div>
           <div className="right">
             <ControlButton
+              className="blueButton"
               label="Connect"
               disabled={connectDisabled}
               icon={faBolt}

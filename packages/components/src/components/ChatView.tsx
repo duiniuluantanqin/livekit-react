@@ -68,7 +68,7 @@ export const ChatView: FC<ChatProps> = ({
       <ControlButton
         label="发送"
         disabled={chatButtonDisabled}
-        className={styles.chatButton}
+        className={styles.blueButton}
         onClick={onSendMsg}
       />
     );
@@ -81,7 +81,7 @@ export const ChatView: FC<ChatProps> = ({
         <textarea 
           className={styles.textareaRecvMsg} 
           value={sendMsg}  
-          placeholder="Type your message here" 
+          placeholder="在这里输入..." 
           onChange={(e) => setSendMsg(e.target.value)} 
           onKeyDown={onTextareaKeyDown}
         />

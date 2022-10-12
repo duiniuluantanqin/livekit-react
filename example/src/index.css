@@ -58,7 +58,7 @@ a:hover {
 .entrySection {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  margin-top: 40px;
+  margin-top: 20px;
   gap: 0.8rem;
 }
 
@@ -154,6 +154,15 @@ a:hover {
 
 .iconButton:disabled {
   cursor: auto;
+}
+
+.blueButton {
+  border-radius: 20px;
+  background: #0884be;
+}
+
+.blueButton:hover {
+  background: #07a4ed;
 }
 
 .participantCount {

@@ -164,12 +164,12 @@ button.dangerButton:hover {
   background: #b81212;
 }
 
-button.chatButton {
+button.blueButton {
   border-radius: 20px;
   background: #0884be;
 }
 
-button.chatButton:hover {
+button.blueButton:hover {
   background: #07a4ed;
 }
 

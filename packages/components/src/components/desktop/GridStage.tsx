@@ -41,14 +41,6 @@ export const GridStage = ({
   ];
   const [selectedTab, setSelectedTab] = useState<number>(tabs[0].index);
 
-  function showParticipantListTab() {
-    alert("123");
-  }
-
-  function showChatTab() {
-    alert("123");
-  }
-
   // compute visible participants and sort.
   useEffect(() => {
     // determine grid size
@@ -166,9 +158,7 @@ export const GridStage = ({
       <div className={styles.controlsArea}>
         <ControlRenderer 
           room={room} 
-          onLeave={onLeave} 
-          showChatTab={showChatTab}
-          showParticipantListTab={showParticipantListTab}/>
+          onLeave={onLeave}/>
       </div>
 
     </div>

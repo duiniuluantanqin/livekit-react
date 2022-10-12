@@ -13,8 +13,8 @@ export interface ControlsProps {
   enableAudio?: boolean;
   enableVideo?: boolean;
   onLeave?: (room: Room) => void;
-  showChatTab?: (visible: boolean) => void;
-  showParticipantListTab?: (visible: boolean) => void;
+  enableChatTab?: boolean;
+  enableParticipantListTab?: boolean;
 }
 
 export const ControlsView = ({
@@ -23,8 +23,8 @@ export const ControlsView = ({
   enableAudio,
   enableVideo,
   onLeave,
-  showChatTab,
-  showParticipantListTab,
+  enableChatTab,
+  enableParticipantListTab,
 }: ControlsProps) => {
   const { cameraPublication: camPub, microphonePublication: micPub } = useParticipant(
     room.localParticipant,
@@ -38,6 +38,12 @@ export const ControlsView = ({
   }
   if (enableAudio === undefined) {
     enableAudio = true;
+  }
+  if (enableChatTab === undefined) {
+    enableChatTab = true;
+  }
+  if (enableParticipantListTab === undefined) {
+    enableParticipantListTab = true;
   }
 
   const [audioButtonDisabled, setAudioButtonDisabled] = React.useState(false);
@@ -101,7 +107,7 @@ export const ControlsView = ({
         onClick={() => {
           setScreenButtonDisabled(true);
           room.localParticipant
-            .setScreenShareEnabled(!enabled)
+            .setScreenShareEnabled(!enabled, {audio: true})
             .finally(() => setScreenButtonDisabled(false));
         }}
       />
@@ -109,22 +115,26 @@ export const ControlsView = ({
   }
 
   let chatButton: ReactElement | undefined;
-  chatButton = (
-    <ControlButton
-      label="聊天"
-      icon={faMessage}
-      onClick={() => {showChatTab && showChatTab(true)}}
-    />
-  );
+  if (enableChatTab) {
+    chatButton = (
+      <ControlButton
+        label="聊天"
+        icon={faMessage}
+        onClick={() => {alert("未实现的功能")}}
+      />
+    );
+  }
   
   let participantListButton: ReactElement | undefined;
-  participantListButton = (
-    <ControlButton
-      label="成员"
-      icon={faPeopleGroup}
-      onClick={() => {showParticipantListTab && showParticipantListTab(true)}}
-    />
-  );
+  if (enableParticipantListTab) {
+    participantListButton = (
+      <ControlButton
+        label="成员"
+        icon={faPeopleGroup}
+        onClick={() => {alert("未实现的功能")}}
+      />
+    );
+  }
 
   return (
     <div className={styles.controlsWrapper}>

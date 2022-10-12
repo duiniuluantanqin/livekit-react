@@ -98,7 +98,12 @@ export const MobileStage = ({
         })}
       </div>
       <div className={styles.controlsArea}>
-        <ControlRenderer room={room} enableScreenShare={false} onLeave={onLeave} />
+        <ControlRenderer 
+          room={room} 
+          enableScreenShare={false} 
+          enableChatTab={false} 
+          enableParticipantListTab={false} 
+          onLeave={onLeave} />
       </div>
     </div>
   );
